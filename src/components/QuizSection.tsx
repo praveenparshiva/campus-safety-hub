@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, XCircle, Award, RotateCcw, ArrowRight, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 interface Question {
   q: string;
@@ -68,6 +69,7 @@ const QuizSection = () => {
   const [score, setScore] = useState(0);
 
   const question = quizData[current];
+  const progress = ((current + (selected ? 1 : 0)) / quizData.length) * 100;
 
   const handleSelect = (opt: string) => {
     if (selected) return;
@@ -92,89 +94,157 @@ const QuizSection = () => {
   };
 
   const getOptionClass = (opt: string) => {
-    if (!selected) return "border-border hover:border-muted-foreground/30 text-foreground";
-    if (opt === question.a) return "border-success bg-success-muted text-foreground";
-    if (opt === selected) return "border-destructive bg-error-muted text-foreground";
-    return "border-border opacity-50 text-muted-foreground";
+    if (!selected)
+      return "border-border bg-card hover:border-primary/30 hover:bg-accent/50 text-foreground cursor-pointer";
+    if (opt === question.a)
+      return "border-success bg-success-muted text-foreground ring-2 ring-success/30";
+    if (opt === selected)
+      return "border-destructive bg-error-muted text-foreground ring-2 ring-destructive/30";
+    return "border-border/50 opacity-40 text-muted-foreground";
+  };
+
+  const getScoreMessage = () => {
+    const pct = (score / quizData.length) * 100;
+    if (pct === 100) return "🏆 Perfect Score! You're a true anti-ragging champion!";
+    if (pct >= 75) return "🌟 Excellent! You have strong awareness about anti-ragging.";
+    if (pct >= 50) return "👍 Good effort! Review the topics you missed.";
+    return "📚 Keep learning! Review the anti-ragging information above.";
   };
 
   return (
     <section className="max-w-3xl mx-auto px-6 py-24" id="quiz">
-      <div className="glass-card p-6 sm:p-10">
-        <div className="mb-8">
-          <h2 className="text-2xl font-extrabold text-foreground mb-2">Awareness Self-Test</h2>
-          <div className="h-1 w-20 bg-primary rounded-full" />
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-10"
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-xs font-bold tracking-widest text-primary uppercase bg-accent rounded-full">
+          <Brain size={12} /> Interactive Quiz
         </div>
+        <h2 className="font-display text-3xl sm:text-4xl font-black text-foreground mb-3">
+          Awareness Self-Test
+        </h2>
+        <p className="text-muted-foreground">Test your knowledge about ragging, laws, and student rights.</p>
+      </motion.div>
 
-        <AnimatePresence mode="wait">
-          {done ? (
-            <motion.div
-              key="done"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-10"
-            >
-              <div className="w-16 h-16 bg-success-muted text-success rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 size={32} />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">Certification Complete</h3>
-              <p className="text-muted-foreground mt-2">
-                You scored {score}/{quizData.length}. You have completed the awareness module.
-              </p>
-              <button
-                onClick={handleRestart}
-                className="mt-6 text-primary font-bold hover:underline"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="glass-card overflow-hidden"
+      >
+        {/* Progress bar */}
+        {!done && (
+          <div className="px-6 sm:px-10 pt-6 sm:pt-8">
+            <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground mb-2">
+              <span>Progress</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+        )}
+
+        <div className="p-6 sm:p-10">
+          <AnimatePresence mode="wait">
+            {done ? (
+              <motion.div
+                key="done"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-8"
               >
-                Restart Quiz
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25 }}
-            >
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
-                Question {current + 1} of {quizData.length}
-              </p>
-              <h3 className="text-xl font-bold mb-6 text-foreground">{question.q}</h3>
-              <div className="grid gap-3">
-                {question.options.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => handleSelect(opt)}
-                    disabled={!!selected}
-                    className={`p-4 text-left rounded-xl font-semibold border-2 transition-all duration-150 ${getOptionClass(opt)} ${!selected ? "cursor-pointer" : "cursor-default"}`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
+                <div className="w-20 h-20 bg-gradient-to-br from-success to-success/70 text-success-foreground rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Award size={40} />
+                </div>
+                <h3 className="font-display text-2xl sm:text-3xl font-black text-foreground mb-2">
+                  Quiz Complete! 🎉
+                </h3>
+                <div className="inline-flex items-center gap-2 px-6 py-3 my-4 bg-muted rounded-full">
+                  <span className="text-3xl font-black text-primary">{score}</span>
+                  <span className="text-muted-foreground font-medium">/ {quizData.length} correct</span>
+                </div>
+                <p className="text-muted-foreground mt-2 mb-2">{getScoreMessage()}</p>
+                <p className="text-sm text-muted-foreground/70 mb-8">
+                  You have completed the anti-ragging awareness module.
+                </p>
+                <Button onClick={handleRestart} variant="outline" className="gap-2">
+                  <RotateCcw size={16} /> Restart Quiz
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={current}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">
+                  Question {current + 1} of {quizData.length}
+                </p>
+                <h3 className="font-display text-xl sm:text-2xl font-bold mb-8 text-foreground leading-snug">
+                  {question.q}
+                </h3>
+                <div className="grid gap-3">
+                  {question.options.map((opt, i) => (
+                    <button
+                      key={opt}
+                      onClick={() => handleSelect(opt)}
+                      disabled={!!selected}
+                      className={`group relative p-4 sm:p-5 text-left rounded-xl font-semibold border-2 transition-all duration-200 ${getOptionClass(opt)} ${!selected ? "active:scale-[0.99]" : "cursor-default"}`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground">
+                          {String.fromCharCode(65 + i)}
+                        </span>
+                        <span className="text-sm sm:text-base">{opt}</span>
+                        {selected && opt === question.a && (
+                          <CheckCircle2 size={20} className="ml-auto text-success flex-shrink-0" />
+                        )}
+                        {selected && opt === selected && opt !== question.a && (
+                          <XCircle size={20} className="ml-auto text-destructive flex-shrink-0" />
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
 
-              <AnimatePresence>
-                {selected && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 p-4 rounded-lg bg-muted border border-border"
-                  >
-                    <p className="text-sm leading-relaxed text-foreground">
-                      <strong>{selected === question.a ? "✓ Correct!" : "✗ Incorrect."}</strong>
-                      <br />
-                      {question.exp}
-                    </p>
-                    <Button onClick={handleNext} className="mt-4" size="sm">
-                      {current + 1 < quizData.length ? "Next Question" : "See Results"}
-                    </Button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                <AnimatePresence>
+                  {selected && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`mt-6 p-5 rounded-xl border-2 ${
+                        selected === question.a
+                          ? "bg-success-muted border-success/30"
+                          : "bg-error-muted border-destructive/30"
+                      }`}
+                    >
+                      <p className="text-sm leading-relaxed text-foreground">
+                        <strong className={selected === question.a ? "text-success" : "text-destructive"}>
+                          {selected === question.a ? "✓ Correct!" : "✗ Incorrect."}
+                        </strong>
+                        <br />
+                        <span className="text-muted-foreground">{question.exp}</span>
+                      </p>
+                      <Button onClick={handleNext} className="mt-4 gap-2" size="sm">
+                        {current + 1 < quizData.length ? (
+                          <>Next Question <ArrowRight size={14} /></>
+                        ) : (
+                          "See Results"
+                        )}
+                      </Button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
     </section>
   );
 };
