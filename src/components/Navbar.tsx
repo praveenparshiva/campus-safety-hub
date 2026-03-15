@@ -34,7 +34,7 @@ const Navbar = () => {
             <Shield size={16} className="text-primary-foreground" />
           </div>
           <span className="font-display font-extrabold text-lg tracking-tight text-foreground">
-            Guardian<span className="text-primary">Protocol</span>
+            SayNoTo<span className="text-primary">Ragging</span>
           </span>
         </a>
         <div className="hidden md:flex items-center gap-1">
@@ -51,7 +51,10 @@ const Navbar = () => {
             <a href="#helpline">🚨 Emergency</a>
           </Button>
         </div>
-        <button className="md:hidden text-foreground p-2 hover:bg-muted rounded-lg transition-colors" onClick={() => setOpen(!open)}>
+        <button
+          className="md:hidden text-foreground p-2 hover:bg-muted rounded-lg transition-colors"
+          onClick={() => setOpen(!open)}
+        >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
@@ -75,8 +78,14 @@ const Navbar = () => {
                   {l.label}
                 </a>
               ))}
-              <Button variant="emergency" asChild className="mt-2 w-full justify-center">
-                <a href="#helpline" onClick={() => setOpen(false)}>🚨 Emergency</a>
+              <Button
+                variant="emergency"
+                asChild
+                className="mt-2 w-full justify-center"
+              >
+                <a href="#helpline" onClick={() => setOpen(false)}>
+                  🚨 Emergency
+                </a>
               </Button>
             </div>
           </motion.div>

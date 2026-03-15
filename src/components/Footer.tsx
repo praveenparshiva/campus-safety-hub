@@ -9,7 +9,7 @@ const Footer = () => (
             <Shield size={16} className="text-primary-foreground" />
           </div>
           <span className="font-display font-extrabold text-lg text-foreground">
-            Guardian<span className="text-primary">Protocol</span>
+            SayNoTo<span className="text-primary">Ragging</span>
           </span>
         </div>
         <p className="text-muted-foreground font-semibold italic text-lg max-w-md">
@@ -17,7 +17,8 @@ const Footer = () => (
         </p>
         <div className="section-divider max-w-xs" />
         <p className="text-muted-foreground/50 text-xs uppercase tracking-widest flex items-center gap-1">
-          Made with <Heart size={10} className="text-primary" /> for safer campuses · © {new Date().getFullYear()}
+          Made with <Heart size={10} className="text-primary" /> for safer
+          campuses · © {new Date().getFullYear()}
         </p>
       </div>
     </div>
