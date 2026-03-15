@@ -4,19 +4,30 @@ import { Play, BookOpen, Heart, Users, ShieldCheck } from "lucide-react";
 
 const floatingIcons = [
   { Icon: Heart, className: "top-20 left-[10%] animate-float", size: 20 },
-  { Icon: Users, className: "top-40 right-[12%] animate-float-delayed", size: 24 },
-  { Icon: ShieldCheck, className: "bottom-20 left-[15%] animate-float-delayed", size: 22 },
+  {
+    Icon: Users,
+    className: "top-40 right-[12%] animate-float-delayed",
+    size: 24,
+  },
+  {
+    Icon: ShieldCheck,
+    className: "bottom-20 left-[15%] animate-float-delayed",
+    size: 22,
+  },
 ];
 
 const HeroSection = () => (
   <header className="relative overflow-hidden">
     {/* Dark gradient background */}
-    <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
-    
+    <div
+      className="absolute inset-0"
+      style={{ background: "var(--gradient-hero)" }}
+    />
+
     {/* Decorative blobs */}
     <div className="floating-dot w-96 h-96 bg-primary top-[-10%] right-[-5%]" />
     <div className="floating-dot w-80 h-80 bg-secondary bottom-[-10%] left-[-5%]" />
-    
+
     {/* Floating icons */}
     {floatingIcons.map(({ Icon, className, size }, i) => (
       <div key={i} className={`absolute ${className} hidden lg:block`}>
@@ -56,8 +67,9 @@ const HeroSection = () => (
         transition={{ duration: 0.5, delay: 0.25 }}
         className="max-w-2xl mx-auto text-lg text-primary-foreground/70 leading-relaxed mb-12"
       >
-        Ragging is a violation of human rights and a criminal offense. This portal empowers students
-        to understand their rights, take action, and build campuses rooted in respect and equality.
+        Ragging is a violation of human rights and a criminal offense. This
+        portal empowers students to understand their rights, take action, and
+        build campuses rooted in respect and equality.
       </motion.p>
 
       <motion.div
@@ -76,27 +88,6 @@ const HeroSection = () => (
             <BookOpen size={18} /> Take the Quiz
           </a>
         </Button>
-      </motion.div>
-
-      {/* Stats bar */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.55 }}
-        className="mt-16 flex flex-wrap justify-center gap-8 sm:gap-16"
-      >
-        {[
-          { value: "1800+", label: "Institutions Covered" },
-          { value: "24/7", label: "Helpline Active" },
-          { value: "100%", label: "Confidential" },
-        ].map((stat) => (
-          <div key={stat.label} className="text-center">
-            <p className="text-2xl sm:text-3xl font-black text-primary-foreground">{stat.value}</p>
-            <p className="text-xs text-primary-foreground/50 font-medium uppercase tracking-wider mt-1">
-              {stat.label}
-            </p>
-          </div>
-        ))}
       </motion.div>
     </div>
   </header>
